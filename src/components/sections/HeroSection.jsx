@@ -110,7 +110,7 @@ export default function HeroSection() {
           </div>
 
           {/* SVG Animated Flow lines */}
-          <svg className="absolute inset-0 h-full w-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+          <svg className="absolute inset-0 h-full w-full pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" preserveAspectRatio="xMidYMid meet">
             {/* Background Paths */}
             <path d="M 120 180 Q 250 80 430 180" fill="none" stroke="rgba(241,246,244,0.05)" strokeWidth="3" />
             <path d="M 120 180 Q 250 280 430 180" fill="none" stroke="rgba(241,246,244,0.05)" strokeWidth="3" />

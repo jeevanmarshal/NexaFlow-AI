@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>Next-Gen Data Automation Platform</b><br/>
-  <i>A premium, pixel-perfect landing page built for the Frontend Battle 3.0 — VibeCoding Competition.</i>
+  <i>Premium AI SaaS landing page — dynamic pricing matrix, Bento-to-Accordion with resize context transfer, state-isolated DOM updates. Built for Frontend Battle 3.0.</i>
 </p>
 
 <p align="center">
@@ -20,14 +20,15 @@
 
 ## ✨ Overview
 
-NexaFlow AI is a high-fidelity, single-page landing website for a fictional AI-powered data automation platform. The project showcases:
+**NexaFlow AI** is a premium, fully responsive SaaS landing page built as a competition submission for **Frontend Battle 3.0 — VibeCoding Phase 1**. The project targets a fictional AI-driven data automation platform and was engineered under strict architectural, performance, and asset-compliance constraints within a 4-hour build window.
 
-- **Choreographed entry animations** — staggered fade-ups, gradient reveals, and counter roll-ups
-- **Dynamic pricing matrix** — real-time currency conversion (USD / INR / EUR) with monthly ↔ yearly billing toggle
-- **Interactive feature accordion** — expand/collapse with smooth panel transitions
-- **Testimonial carousel** — auto-rotating cards with manual navigation
-- **Fully responsive design** — optimised for desktop, tablet, and mobile breakpoints
-- **Accessibility-first** — semantic HTML5, ARIA attributes, keyboard navigation, and focus management
+### What Makes This Submission Stand Out
+
+**Feature 1 — Performance-Isolated Currency Switcher**
+A multi-dimensional pricing configuration matrix (`pricingMatrix.js`) drives all price values dynamically. Switching between INR / USD / EUR and Monthly / Annual billing never triggers a global React re-render — price text nodes are updated via direct `useRef` DOM mutation with `React.memo` shallow comparison, keeping the parent component tree completely stable. Verified clean under Chrome DevTools Profiler.
+
+**Feature 2 — Bento-to-Accordion with State Persistence**
+On desktop (≥768px) features render as an asymmetric CSS Grid Bento layout. On mobile (<768px) they collapse into a touch-optimized Accordion. The critical detail: if a user is hovering over Bento card N and resizes the browser past the mobile breakpoint, the accordion automatically opens at panel N — implemented via a custom `useActiveFeatureIndex` hook with a `lastHoveredIndex` ref and resize event listener. Zero external component libraries used.
 
 ---
 
@@ -35,11 +36,12 @@ NexaFlow AI is a high-fidelity, single-page landing website for a fictional AI-p
 
 | Token | Hex | Usage |
 |---|---|---|
+| **Arctic Powder** | `#F1F6F4` | Body text, light surfaces |
+| **Mystic Mint** | `#D9E8E2` | Secondary light accent, muted borders |
 | **Forsythia** | `#FFC801` | Primary accent, CTAs, highlights |
 | **Deep Saffron** | `#FF9932` | Secondary accent, gradients |
-| **Arctic Powder** | `#F3F4F4` | Body text, light surfaces |
-| **Oceanic Noir** | `#0D2436` | Dark backgrounds, cards |
-| **Abyssal Anchor** | `#0B171E` | Deepest background layer |
+| **Nocturnal Expedition** | `#114C5A` | Teal accent, scrollbar hover |
+| **Oceanic Noir** | `#172B36` | Dark backgrounds, cards |
 
 **Typography:**
 - **Display:** JetBrains Mono (headings, labels, navigation)
@@ -55,8 +57,17 @@ NexaFlow AI is a high-fidelity, single-page landing website for a fictional AI-p
 | Build Tool | [Vite 8](https://vite.dev) |
 | Styling | [Tailwind CSS 4](https://tailwindcss.com) |
 | Linting | [OxLint](https://oxc.rs) |
-| Icons | 14 custom SVGs (Heroicons-based) |
+| Icons | 14 custom SVGs (Heroicons-based) — all meaningfully integrated |
 | Fonts | Google Fonts (JetBrains Mono, Inter) |
+
+### Tech Constraints Honored
+
+- No Framer Motion, Radix, Shadcn, or HeadlessUI
+- All animations via native CSS transitions and `@keyframes`
+- All 14 provided SVG icons integrated meaningfully
+- Exact brand hex palette and typography from the competition asset pack
+- Full semantic HTML5 + Open Graph SEO metadata
+- Entry animation total ≤ 500ms (no TTI blocking)
 
 ---
 
@@ -103,20 +114,20 @@ npm run lint
 ```
 nexaflow-ai/
 ├── public/
-│   ├── svgs/                  # 14 SVG icon assets
+│   ├── svgs/                  # 14 SVG icon assets (all used)
 │   ├── favicon.svg            # Browser tab icon
 │   ├── icons.svg              # SVG sprite sheet
 │   └── og-image.png           # Open Graph social preview
 ├── src/
 │   ├── components/
-│   │   ├── features/          # AccordionItem component
-│   │   ├── layout/            # Navbar, Footer
-│   │   ├── pricing/           # PricingCard, BillingToggle, CurrencyDropdown
+│   │   ├── features/          # AccordionItem, AccordionList, BentoCard, BentoGrid
+│   │   ├── layout/            # Navbar (with search), Footer
+│   │   ├── pricing/           # PricingCard (React.memo), BillingToggle, CurrencyDropdown
 │   │   └── sections/          # HeroSection, FeaturesSection, PricingSection, SocialProof
-│   ├── data/                  # Pricing matrix & feature data
-│   ├── hooks/                 # Custom React hooks
-│   ├── styles/                # Global CSS, animations, Tailwind theme
-│   ├── App.jsx                # Root application component
+│   ├── data/                  # Pricing matrix config & feature data
+│   ├── hooks/                 # useActiveFeatureIndex (Bento↔Accordion state transfer)
+│   ├── styles/                # Global CSS, animations, Tailwind @theme
+│   ├── App.jsx                # Root component + ScrollToTop
 │   └── main.jsx               # React DOM entry point
 ├── index.html                 # HTML shell with SEO meta tags
 ├── vite.config.js             # Vite + Tailwind plugin config
@@ -130,20 +141,58 @@ nexaflow-ai/
 
 | # | Section | Description |
 |---|---|---|
-| 1 | **Hero** | Animated headline, subtext, dual CTA buttons, live metric counters |
-| 2 | **Features** | Accordion-style feature list with icon highlights |
-| 3 | **Pricing** | 3-tier card grid with billing toggle & currency switcher |
-| 4 | **Social Proof** | Auto-rotating testimonial carousel with avatars |
+| 1 | **Hero** | Animated headline, subtext, dual CTA buttons, live pipeline visualizer with SVG flow animations |
+| 2 | **Features** | Desktop Bento Grid ↔ Mobile Accordion with cross-breakpoint state persistence |
+| 3 | **Pricing** | 3-tier card grid with billing toggle, currency switcher, ref-based DOM price updates |
+| 4 | **Social Proof** | Auto-rotating testimonial carousel with prev/next arrows and dot indicators |
 | 5 | **Footer** | Navigation links, newsletter signup, social icons |
+
+---
+
+## 📋 SVG Asset Usage Map
+
+All 14 provided SVGs are meaningfully integrated:
+
+| SVG | Used In |
+|---|---|
+| `arrow-path.svg` | FeaturesSection (Bento/Accordion icon) |
+| `arrow-trending-up.svg` | Hero badge, PricingCard "Most Popular" badge |
+| `chart-pie.svg` | FeaturesSection (Bento/Accordion icon) |
+| `chevron-down.svg` | AccordionItem (closed state), CurrencyDropdown |
+| `chevron-left.svg` | SocialProof carousel (prev arrow) |
+| `chevron-right.svg` | SocialProof carousel (next arrow) |
+| `chevron-up.svg` | ScrollToTop floating button |
+| `chevron-up-solid.svg` | AccordionItem (open state) |
+| `cog-8-tooth.svg` | Hero pipeline visualizer (NexaEngine node) |
+| `cube-16-solid.svg` | Hero pipeline visualizer (Edge Target node), FeaturesSection |
+| `link.svg` | FeaturesSection (Bento/Accordion icon) |
+| `link-solid.svg` | Hero pipeline visualizer, PricingCard feature bullets |
+| `search.svg` | Navbar search button |
+| `x-mark.svg` | Navbar mobile close, CurrencyDropdown close |
 
 ---
 
 ## ⚡ Performance
 
 - **Zero external JS dependencies** beyond React + Vite
+- **`React.memo`** on PricingCard for state isolation (prevents unnecessary re-renders)
 - **CSS-only animations** — no animation libraries
 - **Optimized SVG assets** — inline where possible
+- **`prefers-reduced-motion`** media query for accessibility
 - **Lazy transitions** via `IntersectionObserver` for scroll-triggered animations
+
+---
+
+## ♿ Accessibility
+
+- `<html lang="en">` with proper document outline
+- Semantic landmarks: `<header>`, `<main>`, `<footer>`, `<nav>`, `<section>`
+- `aria-labelledby` on all sections
+- `aria-expanded` and `aria-controls` on accordion triggers
+- `role="region"` on accordion panels
+- `aria-hidden="true"` on all decorative SVGs
+- Keyboard-navigable interactive elements
+- `prefers-reduced-motion` media query
 
 ---
 
@@ -156,11 +205,6 @@ This project is open source and available under the [MIT License](LICENSE).
 ## 🏆 Competition
 
 Built for **Frontend Battle 3.0 — VibeCoding Competition**
-
-- **Strict color palette** — no deviations from the provided hex values
-- **Typography locked** — JetBrains Mono + Inter only
-- **Assets restricted** — only the 14 provided SVGs used
-- **Accessibility audited** — semantic HTML, ARIA roles, keyboard support
 
 ---
 

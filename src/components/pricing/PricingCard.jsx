@@ -1,8 +1,8 @@
 // src/components/pricing/PricingCard.jsx
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, memo } from 'react';
 import { computePrice, PRICING_CONFIG } from '../../data/pricingMatrix';
 
-export default function PricingCard({ 
+function PricingCard({ 
   tierKey, 
   currency, 
   billingCycle 
@@ -114,3 +114,9 @@ export default function PricingCard({
     </article>
   );
 }
+
+export default memo(PricingCard, (prev, next) => {
+  return prev.currency === next.currency &&
+         prev.billingCycle === next.billingCycle &&
+         prev.tierKey === next.tierKey;
+});

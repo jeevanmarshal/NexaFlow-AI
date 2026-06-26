@@ -50,6 +50,13 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-4">
+          <button
+            type="button"
+            aria-label="Search"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-arctic-powder/10 text-arctic-powder/60 transition-all duration-200 hover:bg-arctic-powder/5 hover:text-white hover:border-arctic-powder/20 active:scale-95"
+          >
+            <img src="/svgs/search.svg" alt="" aria-hidden="true" className="h-4 w-4 invert brightness-200" />
+          </button>
           <a 
             href="#pricing" 
             className="font-body inline-flex h-10 items-center justify-center rounded-lg bg-gradient-to-r from-forsythia to-deep-saffron px-5 text-sm font-bold text-oceanic-noir shadow-lg shadow-forsythia/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-forsythia/20 active:translate-y-0 active:scale-95"

@@ -1,5 +1,5 @@
 // src/components/sections/SocialProof.jsx
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const LOGOS = [
   { name: 'Vortex Data', icon: '🌀' },
@@ -14,13 +14,25 @@ const TESTIMONIALS = [
     quote: "NexaFlow AI resolved a major schema drift error on our production pipeline in under 10 milliseconds. Our team didn't even receive a pager duty alert because it healed itself. Absolutely incredible engineering.",
     author: "Sarah Jenkins",
     role: "VP of Engineering at Vortex Data",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120&h=120"
+    initials: "SJ",
+    accentFrom: "from-forsythia",
+    accentTo: "to-deep-saffron"
   },
   {
     quote: "Switching to NexaFlow's regional tariffs saved us over 35% in data warehousing transfer costs. The edge-distributed compute executes our models right next to our users with bulletproof stability.",
     author: "Marcus Chen",
     role: "Lead Cloud Architect at Aether Labs",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120&h=120"
+    initials: "MC",
+    accentFrom: "from-deep-saffron",
+    accentTo: "to-forsythia"
+  },
+  {
+    quote: "We evaluated six pipeline orchestrators before choosing NexaFlow. The self-healing latency alone justified the switch — our P99 recovery time dropped from 4 seconds to under 150ms.",
+    author: "Priya Sharma",
+    role: "CTO at Synapse Core",
+    initials: "PS",
+    accentFrom: "from-forsythia",
+    accentTo: "to-nocturnal-expedition"
   }
 ];
 
@@ -31,6 +43,22 @@ const STATS = [
 ];
 
 export default function SocialProof() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const goNext = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % TESTIMONIALS.length);
+  }, []);
+
+  const goPrev = useCallback(() => {
+    setActiveIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+  }, []);
+
+  // Auto-rotate testimonials every 6 seconds
+  useEffect(() => {
+    const timer = setInterval(goNext, 6000);
+    return () => clearInterval(timer);
+  }, [goNext]);
+
   return (
     <section 
       id="testimonials" 
@@ -67,33 +95,72 @@ export default function SocialProof() {
           </h2>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20 px-4 md:px-0">
-          {TESTIMONIALS.map((t, idx) => (
-            <blockquote 
-              key={idx} 
-              className="relative flex flex-col justify-between rounded-2xl border border-arctic-powder/10 bg-oceanic-noir/50 p-6 md:p-8 shadow-lg backdrop-blur-sm hover:border-arctic-powder/20 transition-all duration-200"
-            >
-              <div className="font-body text-sm md:text-base leading-relaxed text-arctic-powder/80 italic mb-6">
-                "{t.quote}"
+        {/* Testimonial Carousel */}
+        <div className="relative max-w-3xl mx-auto mb-20">
+          
+          {/* Prev Button — uses chevron-left.svg */}
+          <button
+            type="button"
+            aria-label="Previous testimonial"
+            onClick={goPrev}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-14 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-arctic-powder/10 bg-oceanic-noir/80 text-arctic-powder/60 backdrop-blur-sm transition-all duration-200 hover:bg-arctic-powder/10 hover:text-white hover:border-arctic-powder/25 active:scale-90"
+          >
+            <img src="/svgs/chevron-left.svg" alt="" aria-hidden="true" className="h-4 w-4 invert brightness-200" />
+          </button>
+
+          {/* Next Button — uses chevron-right.svg */}
+          <button
+            type="button"
+            aria-label="Next testimonial"
+            onClick={goNext}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-14 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-arctic-powder/10 bg-oceanic-noir/80 text-arctic-powder/60 backdrop-blur-sm transition-all duration-200 hover:bg-arctic-powder/10 hover:text-white hover:border-arctic-powder/25 active:scale-90"
+          >
+            <img src="/svgs/chevron-right.svg" alt="" aria-hidden="true" className="h-4 w-4 invert brightness-200" />
+          </button>
+
+          {/* Testimonial Card */}
+          <blockquote 
+            key={activeIndex}
+            className="relative flex flex-col justify-between rounded-2xl border border-arctic-powder/10 bg-oceanic-noir/50 p-6 md:p-8 shadow-lg backdrop-blur-sm animate-testimonial-fade"
+          >
+            <div className="font-body text-sm md:text-base leading-relaxed text-arctic-powder/80 italic mb-6">
+              "{TESTIMONIALS[activeIndex].quote}"
+            </div>
+            <footer className="flex items-center gap-4 border-t border-arctic-powder/5 pt-4 mt-auto">
+              {/* CSS Initials Avatar — no external images */}
+              <div 
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${TESTIMONIALS[activeIndex].accentFrom} ${TESTIMONIALS[activeIndex].accentTo} font-display text-xs font-extrabold text-oceanic-noir select-none shadow-md`}
+                aria-hidden="true"
+              >
+                {TESTIMONIALS[activeIndex].initials}
               </div>
-              <footer className="flex items-center gap-4 border-t border-arctic-powder/5 pt-4 mt-auto">
-                <img 
-                  src={t.avatar} 
-                  alt={t.author} 
-                  className="h-10 w-10 rounded-full object-cover border border-arctic-powder/20 bg-arctic-powder/10" 
-                />
-                <div>
-                  <cite className="not-italic font-display text-xs font-bold text-white block">
-                    {t.author}
-                  </cite>
-                  <span className="font-body text-[10px] text-arctic-powder/50 block mt-0.5">
-                    {t.role}
-                  </span>
-                </div>
-              </footer>
-            </blockquote>
-          ))}
+              <div>
+                <cite className="not-italic font-display text-xs font-bold text-white block">
+                  {TESTIMONIALS[activeIndex].author}
+                </cite>
+                <span className="font-body text-[10px] text-arctic-powder/50 block mt-0.5">
+                  {TESTIMONIALS[activeIndex].role}
+                </span>
+              </div>
+            </footer>
+          </blockquote>
+
+          {/* Dot Indicators */}
+          <div className="flex items-center justify-center gap-2 mt-6">
+            {TESTIMONIALS.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                aria-label={`Go to testimonial ${idx + 1}`}
+                onClick={() => setActiveIndex(idx)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  idx === activeIndex
+                    ? 'w-6 bg-forsythia'
+                    : 'w-2 bg-arctic-powder/20 hover:bg-arctic-powder/40'
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Stats Grid */}
@@ -111,6 +178,23 @@ export default function SocialProof() {
         </div>
 
       </div>
+
+      {/* Carousel CSS Animation */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes testimonialFade {
+          from {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-testimonial-fade {
+          animation: testimonialFade 300ms ease-out both;
+        }
+      `}} />
     </section>
   );
 }
