@@ -16,22 +16,6 @@
   <img src="https://img.shields.io/badge/License-MIT-green" />
 </p>
 
----
-
-## ✨ Overview
-
-**NexaFlow AI** is a premium, fully responsive SaaS landing page built as a competition submission for **Frontend Battle 3.0 — VibeCoding Phase 1**. The project targets a fictional AI-driven data automation platform and was engineered under strict architectural, performance, and asset-compliance constraints within a 4-hour build window.
-
-### What Makes This Submission Stand Out
-
-**Feature 1 — Performance-Isolated Currency Switcher**
-A multi-dimensional pricing configuration matrix (`pricingMatrix.js`) drives all price values dynamically. Switching between INR / USD / EUR and Monthly / Annual billing never triggers a global React re-render — price text nodes are updated via direct `useRef` DOM mutation with `React.memo` shallow comparison, keeping the parent component tree completely stable. Verified clean under Chrome DevTools Profiler.
-
-**Feature 2 — Bento-to-Accordion with State Persistence**
-On desktop (≥768px) features render as an asymmetric CSS Grid Bento layout. On mobile (<768px) they collapse into a touch-optimized Accordion. The critical detail: if a user is hovering over Bento card N and resizes the browser past the mobile breakpoint, the accordion automatically opens at panel N — implemented via a custom `useActiveFeatureIndex` hook with a `lastHoveredIndex` ref and resize event listener. Zero external component libraries used.
-
----
-
 ## 🎨 Design System
 
 | Token | Hex | Usage |
